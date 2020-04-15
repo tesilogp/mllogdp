@@ -7,7 +7,7 @@
 #
 ###################################################
 
-include ../config.mk
+include ./config.mk
 
 DEVEL = ../../
 
@@ -37,11 +37,17 @@ endif
 OBJ = plscoeffbld.o \
       common.o
 
-all: plscoeffbld
+
+OBJF = featuresbuild.o \
+      common.o
+
+all: plscoeffbld featuresbuild
 
 plscoeffbld: $(OBJ)
 	$(CC) -fopenmp -o $@ $(OBJ) $(LIBRARY) $(LIBPKA)
-	cp -f $@ ../bin/
+
+featuresbuild: $(OBJ)
+	$(CC) -o $@ $(OBJF) $(LIBRARY) $(LIBPKA)
 
 clean:
 	-rm -f *.o plscoeffbld

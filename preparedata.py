@@ -11,8 +11,9 @@ if __name__ == "__main__":
             
     filename = args.file
                     
-    data = pd.read_excel(filename, sheet_name="S1")
+    data = pd.read_excel(filename)
 
-    for ss in data["SMILES structure"]:
-        mol = pybel.readstring("smi", ss)
+    for ss in data["SMILES"]:
+        mol = pybel.readstring("smi", str(ss))
+        logd = data[data["SMILES"] == ss]["LogD"].values[0]
 

@@ -1,4 +1,5 @@
 #include <basStat.h>
+#include <unistd.h>
 
 int fill_matrix (Matrix & x, Matrix & y, std::vector<float> & logp_v, 
     std::vector<std::vector<int> > & finger_v);

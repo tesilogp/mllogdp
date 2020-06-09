@@ -61,7 +61,7 @@ static inline void loadbar(int x, int n, int r, int w)
 
 void usagesex (char * name) 
 {
-  std::cerr << "usage: " << name << " [option] filenamei.mol2" << std::endl;
+  std::cerr << "usage: " << name << " [option] filename.mol2" << std::endl;
   std::cerr << " -h, --help                   : display this help and exit" << std::endl;
   std::cerr << "                                NOCTANOL = 1 CYCLEHEXANE = 2" << std::endl;
                            

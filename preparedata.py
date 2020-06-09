@@ -1,5 +1,8 @@
-import pandas as pd 
+import subprocess
 import argparse
+import time
+
+import pandas as pd 
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
@@ -16,6 +19,8 @@ if __name__ == "__main__":
 
     dim = len(data["SMILES"])
     for idx, ss in enumerate(data["SMILES"]):
+        start = time.time()
+
         mol = Chem.MolFromSmiles(str(ss))
 
         AllChem.Compute2DCoords(mol)
@@ -29,6 +34,11 @@ if __name__ == "__main__":
         fout.close()
 
         logd = data[data["SMILES"] == ss]["LogD"].values[0]
+        subprocess.run(["obabel", "-imol", "molecule_"+str(idx+1)+".mol", 
+            "-omol2", "-O", "molecule_"+str(idx+1)+".mol2"])
+
+        end = time.time()
+
         print("Mol %10d of %10d has %5d "%(idx+1, dim, mol.GetNumAtoms()), 
-                " atoms and LogD %10.5f"%(logd))
+                " atoms and LogD %10.5f (%12.7s s)"%(logd, (end - start)))
 

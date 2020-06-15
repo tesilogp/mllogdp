@@ -10,13 +10,22 @@ from rdkit.Chem import AllChem
 
 def to_descriptor (orderedset, atomtypes):
 
+    desc = np.zeros(len(orderedset))
+
     for at in atomtypes:
+        idx = orderedset.index(at)
+
+        desc[idx] += 1
+
+    return desc
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-f","--file", help="input xlsx file ", \
             required=True, type=str)
+    parser.add_argument("-o","--outfilename", help="output filename default=descriptors.txt ", \
+            required=False, type=str, default="descriptors.txt")
 
     args = parser.parse_args()
             
@@ -26,6 +35,7 @@ if __name__ == "__main__":
 
     molatomtypes = {}
     atomtypesset = set()
+    mollogd = {}
 
     errorscounter = 0
     errorssmiles = []
@@ -61,6 +71,7 @@ if __name__ == "__main__":
 
             atomtypes = result.stdout.split("\n")
             molatomtypes[str(ss)] = atomtypes
+            mollogd[str(ss)] = logd
             for at in atomtypes:
                 atomtypesset.add(at)
         except subprocess.CalledProcessError as grepexc:
@@ -83,9 +94,16 @@ if __name__ == "__main__":
     orderedset = []
     for e in atomtypesset:
         orderedset.append(e)
-
+     
+    fp = open(args.outfilename, "w")
     for mol in molatomtypes:
         atomtypes = molatomtypes[mol]
-
         desc = to_descriptor (orderedset, atomtypes)
+        line = mol + " , "
+        for v in desc:
+            line += "%5d , "%(v)
+        line += " %15.6f \n"%(mollogd[mol])
+        fp.write(line)
+
+    fp.close()
 

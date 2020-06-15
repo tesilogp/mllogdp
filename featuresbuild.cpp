@@ -137,7 +137,7 @@ main (int argc, char **argv)
   aa3_setErrorLevel (aacontext, -1);
   aa3_dearomatize (aacontext);
   aa3_set_Noxide_bondtype (aacontext, 1);  
-
+  
   if (logdp_aa_to_moltype (aacontext, &logdp_molecule, 0) == 0)
   {
     std::cout << molname << std::endl;
@@ -150,6 +150,8 @@ main (int argc, char **argv)
       }
     }
   }
+  else
+    return -1;
 
 #ifdef USE_ALSO_FLAP
   struct pka_mols pka_molecola_in, pka_molecola;;

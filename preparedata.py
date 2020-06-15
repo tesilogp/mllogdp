@@ -21,6 +21,8 @@ if __name__ == "__main__":
     molatomtypes = {}
     atomtypesset = set()
 
+    errorscouter = 0
+    errorssmiles = []
     dim = len(data["SMILES"])
     for idx, ss in enumerate(data["SMILES"]):
         start = time.time()
@@ -46,13 +48,19 @@ if __name__ == "__main__":
             stdout=subprocess.PIPE, universal_newlines=True)
         #print(result.stdout)
 
-        result = subprocess.run("./featuresbuild " +  basename+".mol2",  \
+        try:
+            result = subprocess.run("./featuresbuild " +  basename+".mol2",  \
                 shell=True, check=True, stdout=subprocess.PIPE, \
                 universal_newlines=True) 
-        atomtypes = result.stdout.split("\n")
-        molatomtypes[str(ss)] = atomtypes
-        for at in atomtypes:
-            atomtypesset.add(at)
+
+            atomtypes = result.stdout.split("\n")
+            molatomtypes[str(ss)] = atomtypes
+            for at in atomtypes:
+                atomtypesset.add(at)
+        except subprocess.CalledProcessError as grepexc:
+            print("error code", grepexc.returncode, " for ", str(ss))
+            errorssmiles.append(str(ss))
+            errorscounter += 1
 
         os.remove(basename+".mol")
         os.remove(basename+".mol2")
@@ -61,4 +69,7 @@ if __name__ == "__main__":
 
         print("Mol %10d of %10d has %5d "%(idx+1, dim, mol.GetNumAtoms()), 
                 " atoms and LogD %10.5f (%12.7s s)"%(logd, (end - start)))
+
+    print(atomtypesset)
+    print(errorscounter, " error out of ", dim, " molecules ")
 

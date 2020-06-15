@@ -144,8 +144,10 @@ main (int argc, char **argv)
     for (int i = 0; i < logdp_molecule.dim; i++)
     { 
       if (strcmp (logdp_molecule.atom[i].ttype, "") != 0)
+      {
         ttypeset.insert(logdp_molecule.atom[i].ttype);
-      fprintf (stdout, "%s \n", logdp_molecule.atom[i].ttype);
+        fprintf (stdout, "%s \n", logdp_molecule.atom[i].ttype);
+      }
     }
   }
 

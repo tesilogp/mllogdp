@@ -3,9 +3,15 @@ import argparse
 import time
 import os
 
+import numpy as np
 import pandas as pd 
 from rdkit import Chem
 from rdkit.Chem import AllChem
+
+def to_descriptor (orderedset, atomtypes):
+
+    for at in atomtypes:
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -21,7 +27,7 @@ if __name__ == "__main__":
     molatomtypes = {}
     atomtypesset = set()
 
-    errorscouter = 0
+    errorscounter = 0
     errorssmiles = []
     dim = len(data["SMILES"])
     for idx, ss in enumerate(data["SMILES"]):
@@ -70,6 +76,16 @@ if __name__ == "__main__":
         print("Mol %10d of %10d has %5d "%(idx+1, dim, mol.GetNumAtoms()), 
                 " atoms and LogD %10.5f (%12.7s s)"%(logd, (end - start)))
 
-    print(atomtypesset)
-    print(errorscounter, " error out of ", dim, " molecules ")
+    print(errorscounter, " errors out of ", dim, " molecules ")
+    for i, s in enumerate(errorssmiles):
+        print("  %5d "%(i+1), s)
+
+    orderedset = []
+    for e in atomtypesset:
+        orderedset.append(e)
+
+    for mol in molatomtypes:
+        atomtypes = molatomtypes[mol]
+
+        desc = to_descriptor (orderedset, atomtypes)
 

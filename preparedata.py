@@ -8,17 +8,7 @@ import pandas as pd
 from rdkit import Chem
 from rdkit.Chem import AllChem
 
-def to_descriptor (orderedset, atomtypes):
-
-    desc = np.zeros(len(orderedset))
-
-    for at in atomtypes:
-        idx = orderedset.index(at)
-
-        desc[idx] += 1
-
-    return desc
-
+import mllogdpcommon
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

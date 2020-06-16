@@ -88,7 +88,7 @@ if __name__ == "__main__":
     fp = open(args.outfilename, "w")
     for mol in molatomtypes:
         atomtypes = molatomtypes[mol]
-        desc = to_descriptor (orderedset, atomtypes)
+        desc = mllogdpcommon.to_descriptor (orderedset, atomtypes)
         line = mol + " , "
         for v in desc:
             line += "%5d , "%(v)

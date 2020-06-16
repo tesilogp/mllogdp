@@ -11,4 +11,22 @@ def to_descriptor (orderedset, atomtypes):
 
     return desc
 
+def import_descriptor (filename):
+    fp = open(filename, "r")
+
+    smilelogd = {}
+    descriptors = []
+    for l in fp:
+        sline = l.split(",")
+        smile = sline[0]
+        logd = np.float64(sline[-1])
+
+        descriptors.append([ np.int(v) for v in sline[1:-1]])
+
+        smilelogd[smile] = logd
+    
+    fp.close()
+
+    return smilelogd, np.asarray(descriptors)
+
 

@@ -72,10 +72,13 @@ if __name__ == "__main__":
         os.remove(basename+".mol")
         os.remove(basename+".mol2")
 
+        setid = data[data["SMILES"] == str(ss)]["DatasetID"].values[0]
+
         end = time.time()
 
         print("Mol %10d of %10d has %5d "%(idx+1, dim, mol.GetNumAtoms()), 
-                " atoms and LogD %10.5f (%12.7s s)"%(logd, (end - start)))
+                " atoms and LogD %10.5f (%12.7s s) in set %s"%(logd, (end - start), 
+                    setid))
 
     print(errorscounter, " errors out of ", dim, " molecules ")
     for i, s in enumerate(errorssmiles):
@@ -88,8 +91,9 @@ if __name__ == "__main__":
     fp = open(args.outfilename, "w")
     for mol in molatomtypes:
         atomtypes = molatomtypes[mol]
+        setid = data[data["SMILES"] == mol]["DatasetID"].values[0]
         desc = mllogdpcommon.to_descriptor (orderedset, atomtypes)
-        line = mol + " , "
+        line = mol + " , " + setid + " , "
         for v in desc:
             line += "%5d , "%(v)
         line += " %15.6f \n"%(mollogd[mol])

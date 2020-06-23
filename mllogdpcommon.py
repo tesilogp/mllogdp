@@ -15,15 +15,18 @@ def import_descriptor (filename):
     fp = open(filename, "r")
 
     smilelogd = {}
+    smilesetid = {}
     descriptors = []
     for l in fp:
         sline = l.split(",")
         smile = sline[0]
         logd = np.float64(sline[-1])
+        vid = sline[1]
 
-        descriptors.append([ np.int(v) for v in sline[1:-1]])
+        descriptors.append([ np.int(v) for v in sline[2:-1]])
 
         smilelogd[smile] = logd
+        smilesetid[smile] = vid
     
     fp.close()
 
